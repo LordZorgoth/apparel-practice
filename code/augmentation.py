@@ -2,11 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.ndimage as img
 
-def randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
-                    seed_index=None,p_rotate=0.75,max_angle=10,p_flip=0.2):
+
+def randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
+                    max_angle=10, max_shift=2,
+                    fixed_seeds=False, seed_count=10, seed_index=None):
     """
-    randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
-                    seed_index=None,p_rotate=0.75,max_angle=10,p_flip=0.2)
+    randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
+                    max_angle=10, max_shift=2,
+                    fixed_seeds=False, seed_count=10, seed_index=None)
 
     Returns augmentation of dataset X and labels y. This augmentation
     is produced by adding random transformations of each element of X.
@@ -28,12 +31,12 @@ def randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
         maximum number of pixels by which to translate in each direction
     fixed_seeds : bool
         If fixed_seeds is True, "random" seeds will be deterministically
-        computed for reproducibility, and there will be a set list of seeds
-        used so that only a certain number of image transformations are
-        possible.
+        computed for reproducibility, and there will be a set list
+        of seeds  used so that only a certain number
+        of image transformations are possible.
     seed_count : positive integer
-        If fixed_seeds is True, this is the number of image transformations
-        for each image.
+        If fixed_seeds is True, this is the number of possible
+        transformations for each image.
     seed_index : None or integer in range(0,seed_count)
         If fixed_seeds is True seed_index is None, a transformation will
         be selected from the list of possible transformations at random.
@@ -45,65 +48,69 @@ def randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
     Returns
     -------
     image : the transformed image
-    
+
     """
-    #Our images have channels first, so height is shape[1] and width is shape[2]
-    H,W=image.shape[1],image.shape[2]
-    #Return image unchanged with probability p_same.
+    # Our images have channels first,
+    # so height is shape[1] and width is shape[2]
+    H, W = image.shape[1], image.shape[2]
+    # Return image unchanged with probability p_same.
     np.random.seed()
-    if np.random.rand()<p_same:
+    if np.random.rand() < p_same:
         return image
-    #If fixed_seeds is True, we are ensuring that there are only seed_count
-    #possible transformations of image
+    # If fixed_seeds is True, we are ensuring that there are only
+    # seed_count possible transformations of image
     if fixed_seeds:
-        #Generate a unique value for each image by taking a subarray of
-        #6 "random" non-zero, non-one values and hashing its string;
-        #we will use this value to create a fixed but unique list of
-        #random seeds for each image
+        # Generate a unique value for each image by taking a subarray of
+        # 6 "random" non-zero, non-one values and hashing its string;
+        # we will use this value to create a fixed but unique list of
+        # random seeds for each image
         np.random.seed(1)
-        np.random.seed(hash(
-            np.random.choice(image[np.logical_and(image!=0,image!=1)],6)
-            .tostring())%2**32)
-        #generate a list of seed_count seeds, still uniquely corresponding
-        #to the image
-        seed_choices=np.random.randint(2**32,size=seed_count)
-        #Select one of the seeds in seed_choices
+        image_values_not_zero_one=image[np.logical_and(image != 0, image != 1)]
+        np.random.seed(
+            hash(np.random.choice(image_values_not_zero_one, 6).tostring()
+                 ) % 2**32
+            )
+        # Generate a list of seed_count seeds, still corresponding
+        # uniquely to the image
+        seed_choices = np.random.randint(2**32, size=seed_count)
+        # Select one of the seeds in seed_choices
         if seed_index is None:
             np.random.seed()
             np.random.seed(seed_choices[np.random.randint(seed_count)])
         else:
             np.random.seed(seed_choices[seed_index])
-    #Rotate
-    if np.random.rand()<p_rotate:
-        angle=2*max_angle*(0.5-np.random.rand())
-        image=img.rotate(image, angle, axes=(1,2),
-                         reshape=False, output=None, order=2,
-                         mode='nearest')
-    #Reflect horizontally
-    if np.random.rand()<p_flip:
-            image=np.flip(image,2)
-    #Translate
-    h=np.random.randint(-max_shift,max_shift+1)
-    w=np.random.randint(-max_shift,max_shift+1)
-    image=img.shift(image,(0,h,w),order=0,mode='nearest')
+    # Rotate
+    if np.random.rand() < p_rotate:
+        angle = 2*max_angle*(0.5-np.random.rand())
+        image = img.rotate(image, angle, axes=(1, 2),
+                           reshape=False, output=None, order=2,
+                           mode='nearest')
+    # Reflect horizontally
+    if np.random.rand() < p_flip:
+        image = np.flip(image, 2)
+    # Translate
+    h = np.random.randint(-max_shift, max_shift+1)
+    w = np.random.randint(-max_shift, max_shift+1)
+    image = img.shift(image, (0, h, w), order=0, mode='nearest')
     return image
 
-def augment_dataset(X,y,n_copies,
-                     max_shift=2,p_same=0,fixed_seeds=False,
-                     p_rotate=0.75,max_angle=10,p_flip=0.2):
+
+def augment_dataset(X, y, n_copies,
+                    p_same=0, p_rotate=0.75, p_flip=0.2,
+                    max_angle=10, max_shift=2, fixed_seeds=False):
     """
-    augment_dataset(X,y,n_copies,
-                     max_shift=2,p_same=0,fixed_seeds=True,
-                     p_rotate=0.75,max_angle=10,p_flip=0.2)
+    augment_dataset(X, y, n_copies,
+                    p_same=0, p_rotate=0.75, p_flip=0.2,
+                    max_angle=10, max_shift=2, fixed_seeds=False)
 
     Returns augmentation of dataset X and labels y. This augmentation
     is produced by adding random transformations of each element of X.
 
     Parameters
     ----------
-    X : 4-D array of size (number of samples, 1, image height, image width)
+    X : 4-D array of size (number of examples, 1, height, width)
         The data set to augment
-    y : 2-D array of size (number of samples, number of classes)
+    y : 2-D array of size (number of examples, number of classes)
         The labels corresponding to X
     n_copies : nonnegative integer
         The number of transformations of each image in X to create
@@ -119,8 +126,8 @@ def augment_dataset(X,y,n_copies,
     max_shift : nonnegative integer
         maximum number of pixels by which to translate in each direction
     fixed_seeds : bool
-        If fixed_seeds is True, the augmented data set will always contain
-        the same transformations across multiple runs of augment_dataset.
+        If fixed_seeds is True, the augmented data set will contain the
+        same transformations across multiple runs of augment_dataset.
 
     Returns
     -------
@@ -128,17 +135,19 @@ def augment_dataset(X,y,n_copies,
         The augmented dataset
     ynew : 2-D array
         Labels for Xnew
-    
+
     """
-    m=X.shape[0]
-    n=n_copies+1
-    Xnew=np.tile(np.zeros_like(X),(n,1,1,1))
-    ynew=np.tile(np.zeros_like(y),(n,1))
-    for i in range(0,m):
-        Xnew[i*n]=X[i]
-        ynew[i*n]=y[i]
-        for j in range(1,n):
-            Xnew[i*n+j]=randomize_image(
-                X[i],fixed_seeds=fixed_seeds,seed_count=n_copies,seed_index=j-1)
-            ynew[i*n+j]=y[i]
-    return Xnew,ynew
+    m = X.shape[0]
+    n = n_copies+1
+    Xnew = np.tile(np.zeros_like(X), (n, 1, 1, 1))
+    ynew = np.tile(np.zeros_like(y), (n, 1))
+    for i in range(0, m):
+        Xnew[i*n] = X[i]
+        ynew[i*n] = y[i]
+        for j in range(1, n):
+            Xnew[i*n + j] = randomize_image(
+                X[i], fixed_seeds=fixed_seeds,
+                seed_count=n_copies, seed_index=j-1
+                )
+            ynew[i*n + j] = y[i]
+    return Xnew, ynew
