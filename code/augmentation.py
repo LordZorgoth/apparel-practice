@@ -15,12 +15,12 @@ def randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
     ----------
     image : 3-D array of size (1, height, width)
         image to be processed
-    p_same : 
+    p_same : float between 0 and 1
         probability of a given "transformation" being forced to be
         identical to the original
-    p_rotate : 
+    p_rotate : float between 0 and 1
         probability of applying a random rotation
-    p_flip : 
+    p_flip : float between 0 and 1
         probability of reflecting the image horizontally
     max_angle : nonnegative number < 360
         maximum rotation angle, in degrees
@@ -66,9 +66,9 @@ def randomize_image(image,max_shift=2,p_same=0,fixed_seeds=False,seed_count=10,
             .tostring())%2**32)
         #generate a list of seed_count seeds, still uniquely corresponding
         #to the image
-        seed_choices=np.random.randint(2**32,seed_count)
+        seed_choices=np.random.randint(2**32,size=seed_count)
         #Select one of the seeds in seed_choices
-        if seed_choice is None:
+        if seed_index is None:
             np.random.seed()
             np.random.seed(seed_choices[np.random.randint(seed_count)])
         else:
@@ -105,14 +105,14 @@ def augment_dataset(X,y,n_copies,
         The data set to augment
     y : 2-D array of size (number of samples, number of classes)
         The labels corresponding to X
-    n_copies : 
+    n_copies : nonnegative integer
         The number of transformations of each image in X to create
-    p_same : 
+    p_same : float between 0 and 1
         probability of a given "transformation" being forced to be
-    identical to the original
-    p_rotate : 
+        identical to the original
+    p_rotate : float between 0 and 1
         probability of applying a random rotation
-    p_flip : 
+    p_flip : float betewwn 0 and 1
         probability of reflecting the image horizontally
     max_angle : nonnegative number < 360
         maximum rotation angle, in degrees

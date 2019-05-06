@@ -1,16 +1,17 @@
 import keras.layers as lyr
 import keras.models as mdl
 import keras.regularizers as reg
+import numpy as np
 
 def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
-                     init_filters=32,lambda_conv=0,lambda_fc=0.001,
+                     init_filters=32,lambda_conv=0,lambda_fc=0.00002,
                      fc_layers=[512,64,10],dropout=[0.5,0.5,0.25],
-                     global_average=False,final_pool_size=3):
+                     global_average_vs_max=False,final_pool_size=3):
     """ 
-    model_build_conv(conv_layer_count=[1,2],conv_vs_pool_sep=True,
+    model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
                      init_filters=32,lambda_conv=0,lambda_fc=0.001,
                      fc_layers=[512,64,10],dropout=[0.5,0.5,0.25],
-                     global_average=False,final_pool_size=3)
+                     global_average_vs_max=False,final_pool_size=3)
     
     This builds the Keras model for our convolutional neural network.
     We start with convolutional layers consisting of 5x5 filters
@@ -45,11 +46,11 @@ def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
         most likely set this to zero.
     lambda_fc : nonnegative float
         L2 regularization parameter for fully connected layers.
-    global_average : bool
+    global_average_vs_max : bool
         Determines whether our final pooling layer is a global average
         or max pooling layer.
     final_pool_size : positive integer
-        If global_average is False, this variable determines pool_size
+        If global_average_vs_max is False, this variable determines pool_size
         for the final max pooling layer.
     fc_layers : list of positive integers
         List of sizes of fully connected layers.
@@ -74,7 +75,7 @@ def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
         model.add(lyr.Activation('relu'))
     #Reduce dimensions of images from 28x28 to 14x14, either via a
     #convolutional layer or a max pooling layer.
-    if conv_vs_pool_sep:
+    if conv_vs_pool:
         model.add(
             lyr.Conv2D(2*init_filters,(5,5),input_shape=(1,28,28),strides=(2,2),
                        data_format='channels_first',padding='same',
@@ -96,7 +97,7 @@ def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
     #We now reduce our 12x12 images to produce the final output of the
     #convolutional portion of the network,
     #either through global average pooling or max pooling.
-    if global_average:
+    if global_average_vs_max:
         model.add(lyr.GlobalAveragePooling2D(data_format='channels_first'))
         input_size=4*init_filters
     else:
@@ -107,8 +108,8 @@ def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
     model.add(lyr.Flatten(data_format='channels_first'))
     for i in range(len(fc_layers)-1):
         model.add(lyr.Dropout(dropout[i]))
-        model.add(lyr.Dense(fc_layers[i],input_shape=(input_size,)),
-                  kernel_regularizer=reg.l2(lambda_fc))
+        model.add(lyr.Dense(fc_layers[i],input_shape=(input_size,),
+                  kernel_regularizer=reg.l2(lambda_fc)))
         model.add(lyr.Activation('relu'))
         input_size=fc_layers[i]
     #The output layer is below
@@ -118,7 +119,7 @@ def model_build_conv(conv_layer_count=[1,2],conv_vs_pool=True,
                         kernel_regularizer=reg.l2(lambda_fc)))
     return model
 
-def model_build_fc(lambda_fc=0.001,input_shape=(1,28,28),
+def model_build_fc(lambda_fc=0.00002,input_shape=(1,28,28),
                    layers=[400,250,100,50,10],dropout=[0.25,0.5,0.5,0.5,0.25]):
     """
     model_build_mlp(lamda=0.001,input_size=784,layers=[400,250,100,50,10],
@@ -143,11 +144,13 @@ def model_build_fc(lambda_fc=0.001,input_shape=(1,28,28),
         the resultant Keras model
     """
     model=mdl.Sequential()
-    model.add(lyr.Flatten(data_format='channels_first',input_shape=(1,28,28)))
+    model.add(lyr.Flatten(data_format='channels_first',input_shape=input_shape))
+    input_size=np.product(input_shape)
+    activation_list=['relu']*(len(layers)-1)+['softmax']
     for i in range(len(layers)):
         model.add(lyr.Dropout(dropout[i]))
         model.add(lyr.Dense(layers[i],input_shape=(input_size,),
                             kernel_regularizer=reg.l2(lambda_fc)))
-        model.add(lyr.Activation('relu'))
+        model.add(lyr.Activation(activation_list[i]))
         input_size=layers[i]
     return model

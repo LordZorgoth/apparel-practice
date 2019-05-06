@@ -1,4 +1,6 @@
 import numpy as np
+import keras
+import time
 
 def convert_arrays_to_accuracy(y1,y2):
     """
@@ -7,6 +9,18 @@ def convert_arrays_to_accuracy(y1,y2):
     This function returns the rate of agreements between two sets of labels,
     so that for example convert_arrays_to_accuracy(model.predict(X_val),y_val)
     should produce validation accuracy.
+
+    Parameters
+    ----------
+    y1 : 2-D array with shape (number_of_examples,number_of_classes)
+        a set of labels
+    y2 : 2-D array with shape (number_of_examples,number_of_classes)
+        another set of labels
+
+    Returns
+    -------
+    acc : float between 0 and 1
+        The rate of agreement between y1 and y2
     """
     assert y1.shape==y2.shape
     M=y1.shape[0]
@@ -15,7 +29,7 @@ def convert_arrays_to_accuracy(y1,y2):
     return acc
 
 #This class is copied off of a StackOverflow answer.
-#I am claiming it so that I can plot information on
+#I am using it so that I can plot information on
 #loss and accuracy vs computation time instead of just
 #epochs.
 class TimeHistory(keras.callbacks.Callback):

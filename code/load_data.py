@@ -9,7 +9,6 @@ TRAIN_SIZE=60000
 TEST_SIZE=10000
 IMAGE_HEIGHT=28
 IMAGE_WIDTH=28
-IMAGE_PIXELS=IMAGE_HEIGHT*IMAGE_WIDTH
 
 def num_to_ex_file_name(n):
     n=round(n) #to ensure that n is an integer
@@ -59,9 +58,9 @@ def load_train_data(m=TRAIN_SIZE,set_small_values_to_zero=False):
     X=np.zeros([m,1,IMAGE_HEIGHT,IMAGE_WIDTH])
     for i in range(m):
         X[i][0]=file_name_to_grayscale_image(samplefiles[i])
-    (m,H,W)=X.shape
-    #Optionally set small values to zero while ensuring that
-    #variation is continuous.
+    m,dummy,H,W=X.shape
+    #Optionally set small values to zero without introducing new discontinuities
+    #NOTE: This part of the code should possibly be moved to augmentation.py
     if set_small_values_to_zero:
         X[X<0.025]=0
         values=X[np.logical_and(X>=0.025,X<=0.1)]
