@@ -10,6 +10,8 @@ TEST_SIZE=10000
 IMAGE_HEIGHT=28
 IMAGE_WIDTH=28
 
+#This function converts an integer into the path
+#to the corresponding example image
 def num_to_ex_file_name(n):
     n=round(n) #to ensure that n is an integer
     if n>=1 and n<= TRAIN_SIZE:
@@ -19,7 +21,7 @@ def num_to_ex_file_name(n):
     else:
         raise IndexError("Example ID is out of range")
 
-#This function loads grayscale 
+#Since the images are grayscale, this function loads data from only one channel.
 def file_name_to_grayscale_image(filename,unroll=False):
     image_data=plt.imread(filename)
     if unroll:
