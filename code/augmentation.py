@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import scipy.ndimage as img
 
 
@@ -37,7 +36,7 @@ def randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
     seed_count : positive integer
         If fixed_seeds is True, this is the number of possible
         transformations for each image.
-    seed_index : None or integer in range(0,seed_count)
+    seed_index : None or integer in range(seed_count)
         If fixed_seeds is True seed_index is None, a transformation will
         be selected from the list of possible transformations at random.
         If fixed_seeds is True and seed_index is not None, it selects a

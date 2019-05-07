@@ -5,14 +5,14 @@ import numpy as np
 
 
 def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
-                     init_filters=32, lambda_conv=0, lambda_fc=0.00002,
+                     init_filters=32, lambda_conv=0, lambda_dense=0.001,
                      global_average_vs_max=False, final_pool_size=3,
-                     fc_layers=[512, 64, 10], dropout=[0.5, 0.5, 0.25]):
+                     dense_layers=[50, 10], dropout=[0.5, 0.25]):
     """ 
     model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
-                     init_filters=32, lambda_conv=0, lambda_fc=0.00002,
+                     init_filters=32, lambda_conv=0, lambda_dense=0.001,
                      global_average_vs_max=False, final_pool_size=3,
-                     fc_layers=[512, 64, 10], dropout=[0.5, 0.5, 0.25])
+                     dense_layers=[50, 10], dropout=[0.5, 0.25])
 
     This builds the Keras model for our convolutional neural network.
     We start with convolutional layers consisting of 5x5 filters
@@ -21,10 +21,10 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
     We then apply convolutional layers consisting of 3x3 filters,
     with the last layer having no padding, resulting in 12x12 images.
     We then apply either global average pooling or max pooling before
-    feeding our features into a fully connected network.
+    feeding our features into a dense network.
 
     The convolutional layers are regularized with batch normalization,
-    while the fully connected layers are regularized with dropout.
+    while the dense layers are regularized with dropout.
 
     Parameters
     ----------
@@ -45,20 +45,20 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
         L2 regularization parameter for convolutional layers; as we
         are already regularizing with batch normalization, we will
         most likely set this to zero.
-    lambda_fc : nonnegative float
-        L2 regularization parameter for fully connected layers.
+    lambda_dense : nonnegative float
+        L2 regularization parameter for dense layers.
     global_average_vs_max : bool
         determines whether our final pooling layer is a global average
         or max pooling layer
     final_pool_size : positive integer
         If global_average_vs_max is False, this variable determines
         pool_size for the final max pooling layer.
-    fc_layers : list of positive integers
-        List of sizes of fully connected layers. The last element
+    dense_layers : list of positive integers
+        List of sizes of dense layers. The last element
         is the output layer.
-        fc_layers[-1] should be the number of classes.
+        dense_layers[-1] should be the number of classes.
     dropout : list of floats between 0 and 1
-        list of dropout probabilities for fully connected layers
+        list of dropout probabilities for dense layers
 
     Returns
     -------
@@ -117,34 +117,34 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
                           data_format='channels_first')
             )
         input_size = 4 * init_filters * (12/final_pool_size)**2
-    # Final stage of network: fully connected layers.
+    # Final stage of network: dense layers.
     model.add(lyr.Flatten(data_format='channels_first'))
-    activation_list = ['relu']*(len(fc_layers)-1) + ['softmax']
-    for i in range(len(fc_layers)):
+    activation_list = ['relu']*(len(dense_layers)-1) + ['softmax']
+    for i in range(len(dense_layers)):
         model.add(lyr.Dropout(dropout[i]))
         model.add(
-            lyr.Dense(fc_layers[i], input_shape=(input_size,),
-                      kernel_regularizer=reg.l2(lambda_fc))
+            lyr.Dense(dense_layers[i], input_shape=(input_size,),
+                      kernel_regularizer=reg.l2(lambda_dense))
             )
         model.add(lyr.Activation(activation_list[i]))
-        input_size = fc_layers[i]
+        input_size = dense_layers[i]
     return model
 
 
-def model_build_fc(lambda_fc=0.00002, input_shape=(1, 28, 28),
+def model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
                    layers=[400, 250, 100, 50, 10],
                    dropout=[0.25, 0.5, 0.5, 0.5, 0.25]):
     """
-    model_build_fc(lambda_fc=0.00002, input_shape=(1, 28, 28),
+    model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
                    layers=[400, 250, 100, 50, 10],
                    dropout=[0.25, 0.5, 0.5, 0.5, 0.25])
 
-    Builds a Keras model for a fully connected neural network with
+    Builds a Keras model for a dense neural network with
     dropout and L2 regularization.
 
     Parameters
     ----------
-    lambda_fc : nonnegative float
+    lambda_dense : nonnegative float
         L2 regularization parameter
     input_shape : tuple of positive integers
         shape of input
@@ -169,7 +169,7 @@ def model_build_fc(lambda_fc=0.00002, input_shape=(1, 28, 28),
         model.add(lyr.Dropout(dropout[i]))
         model.add(
             lyr.Dense(layers[i], input_shape=(input_size,),
-                            kernel_regularizer=reg.l2(lambda_fc))
+                            kernel_regularizer=reg.l2(lambda_dense))
             )
         model.add(lyr.Activation(activation_list[i]))
         input_size = layers[i]
