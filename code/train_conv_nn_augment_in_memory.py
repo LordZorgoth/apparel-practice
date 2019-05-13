@@ -40,8 +40,8 @@ for E in range(epochs):
               validation_data=(Xval, yval), epochs=E+1, initial_epoch=E,
               batch_size=32, shuffle=True)
     train_acc = convert_arrays_to_accuracy(
-                    model.predict(Xtr[0 :: n_transforms+1]),
-                    ytr[0 :: n_transforms+1]
+                    model.predict(Xtr[0:: n_transforms+1]),
+                    ytr[0:: n_transforms+1]
                     )
     train_accs.append(train_acc)
     print("True training accuracy is "+str(train_acc)[0:6]+".\n")

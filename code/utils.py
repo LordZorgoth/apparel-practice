@@ -9,7 +9,7 @@ def convert_arrays_to_accuracy(y1, y2):
 
     This function returns the rate of agreement
     between two sets of labels, so that, for example,
-        convert_arrays_to_accuracy(model.predict(X_val),y_val)
+    convert_arrays_to_accuracy(model.predict(X_val),y_val)
     should produce validation accuracy.
 
     Parameters
