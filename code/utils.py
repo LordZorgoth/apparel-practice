@@ -35,6 +35,7 @@ def convert_arrays_to_accuracy(y1, y2):
 # loss and accuracy vs computation time instead of just
 # epochs.
 
+
 class TimeHistory(keras.callbacks.Callback):
     def on_train_begin(self, logs={}):
         self.times = []

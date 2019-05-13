@@ -1,5 +1,4 @@
 import keras.layers as lyr
-from keras.engine.input_layer import Input
 import keras.models as mdl
 import keras.regularizers as reg
 import numpy as np
@@ -10,7 +9,7 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
                      global_average_vs_max=False, final_pool_size=3,
                      dense_layers=[50, 10], dropout=[0.5, 0.25],
                      is_only_for_plotting=False):
-    """ 
+    """
     model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
                      init_filters=32, lambda_conv=0, lambda_dense=0.001,
                      global_average_vs_max=False, final_pool_size=3,
@@ -96,8 +95,7 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
             )
         model.layers[-1].name = ('5x5 Conv 2D #'
                                  + str(conv_layer_count[0]+1)
-                                 + ', stride 2')
-                                 
+                                 + ', stride 2')                                 
         if not is_only_for_plotting:
             model.add(lyr.BatchNormalization(axis=1))
             model.add(lyr.Activation('relu'))
@@ -142,12 +140,12 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
     model.layers[-1].name = "Flatten"
     for i in range(len(dense_layers)):
         model.add(lyr.Dropout(dropout[i]))
-        model.layers[-1].name = "Dropout(%s)"%dropout[i]
+        model.layers[-1].name = "Dropout(%s)" % dropout[i]
         model.add(
             lyr.Dense(dense_layers[i], input_shape=(input_size,),
                       kernel_regularizer=reg.l2(lambda_dense))
             )
-        model.layers[-1].name='Dense Layer #' + str(i+1)
+        model.layers[-1].name = 'Dense Layer #' + str(i+1)
         if i == len(dense_layers)-1:
             model.layers[-1].name = 'Output Layer'
             model.add(lyr.Activation('softmax'))
@@ -159,9 +157,9 @@ def model_build_conv(conv_layer_count=[1, 2], conv_vs_pool=True,
 
 
 def model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
-                   layers=[400, 250, 100, 50, 10],
-                   dropout=[0.25, 0.5, 0.5, 0.5, 0.25],
-                   is_only_for_plotting=False):
+                      layers=[400, 250, 100, 50, 10],
+                      dropout=[0.25, 0.5, 0.5, 0.5, 0.25],
+                      is_only_for_plotting=False):
     """
     model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
                    layers=[400, 250, 100, 50, 10],
@@ -192,16 +190,17 @@ def model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
         the resultant Keras model
     """
     model = mdl.Sequential()
-    model.add(lyr.Flatten(data_format='channels_first',
+    model.add(
+        lyr.Flatten(data_format='channels_first',
                           input_shape=input_shape)
-             )
+        )
     input_size = np.product(input_shape)
     activation_list = ['relu']*(len(layers)-1) + ['softmax']
     for i in range(len(layers)):
         model.add(lyr.Dropout(dropout[i]))
         model.add(
             lyr.Dense(layers[i], input_shape=(input_size,),
-                            kernel_regularizer=reg.l2(lambda_dense))
+                      kernel_regularizer=reg.l2(lambda_dense))
             )
         model.add(lyr.Activation(activation_list[i]))
         input_size = layers[i]

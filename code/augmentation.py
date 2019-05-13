@@ -40,7 +40,7 @@ def randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
         If fixed_seeds is True seed_index is None, a transformation will
         be selected from the list of possible transformations at random.
         If fixed_seeds is True and seed_index is not None, it selects a
-        specific element from the set of possible transformations. This 
+        specific element from the set of possible transformations. This
         is used in the function augment_dataset to ensure that we get
         one of each transformation.
 
@@ -49,9 +49,6 @@ def randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
     image : the transformed image
 
     """
-    # Our images have channels first,
-    # so height is shape[1] and width is shape[2]
-    H, W = image.shape[1], image.shape[2]
     # Return image unchanged with probability p_same.
     np.random.seed()
     if np.random.rand() < p_same:
@@ -64,7 +61,8 @@ def randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
         # we will use this value to create a fixed but unique list of
         # random seeds for each image
         np.random.seed(1)
-        image_values_not_zero_one=image[np.logical_and(image != 0, image != 1)]
+        image_values_not_zero_one = image[np.logical_and(image != 0,
+                                                         image != 1)]
         np.random.seed(
             hash(np.random.choice(image_values_not_zero_one, 6).tostring()
                  ) % 2**32

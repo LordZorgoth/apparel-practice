@@ -1,10 +1,11 @@
-from load_data import *
+from load_data import load_train_data
 from model_building import model_build_dense
 from sklearn.model_selection import train_test_split
 from keras.callbacks import History
 from keras.metrics import categorical_accuracy
-from utils import *
+from utils import convert_arrays_to_accuracy, TimeHistory
 import augmentation as aug
+import numpy as np
 
 # m is the number of examples to load from the training dataset.
 # Reducing m is especially useful when debugging to allow
