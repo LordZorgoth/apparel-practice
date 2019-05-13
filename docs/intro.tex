@@ -1,0 +1,10 @@
+\section{Introduction}
+In this repository, we are developing code to solve a practice image classification problem that can be found at \url{https://datahack.analyticsvidhya.com/contest/practice-problem-identify-the-apparels}. Here, we document our data, our model, our code, our repository, and our plans for testing and for tuning parameters. 
+\subsection{What this Document Still Needs}
+This document is a work in progress. It needs quite a bit of editing and many more hyperlinks, and there are sections that have not been completed. We have not gone over the dense neural network model at all, nor have we discussed all of the parameters of the convolutional network. We also should switch to using bullet-pointed lists to discuss parameters rather than doing so in pure paragraph form, as we are doing at the moment. My attempts at visualizing the networks as graphs had to be postponed because of a prolonged and mostly unproductive fight with bugs in {\ttfamily keras.utils.plot\_model()}.
+
+I wrote a script ({\ttfamily docs/scripts/find\_docstrings.py}) that extracts docstrings from all the functions in the {\ttfamily code/} directory, and the next project on that front is write another script to convert that documentation into a format that will look good in a LaTeX document. I hope to be able to use such scripts in this project and future projects to produce pdf documentation of my code that updates itself automatically.
+
+The biggest missing piece is the unwritten section on testing strategy. While we touch on that when we discuss the parameters of our image processing and model design functions in \S\ref{imageprocessingparams} and \S\ref{convolutionalparams}, we need a fully organized plan for testing and tuning. The plan will be stored here, while documentation of the actual test runs will be in a separate pdf.
+
+Beyond that, I want to add a section on optimizers. There are some facts that I gleaned from papers on that subject and a few others, so I also plan to add a bibliography. Glossaries are also generally useful, and we will add one.

@@ -1,0 +1,25 @@
+load_train_data(m=TRAIN_SIZE,set_small_values_to_zero=False)
+
+This function loads the train data from the train folder, returning
+the dataset X and labels y.
+
+Parameters
+----------
+m : positive integer
+    number of training examples to load
+set_small_values_to_zero : bool
+    If True, we set pixels that are nearly black to be completely
+    black. I doubt this will do much one way or the other,
+    but because all the images are approximately zero near the
+    boundary already, I thought that I would experiment
+    to see if this avoids any weirdness that might result
+    from filling in values during transformations
+    used for dataset augmentation.
+
+Returns
+-------
+X: 4-D array with shape (m,1,IMAGE_HEIGHT,IMAGE_WIDTH)
+    dataset in a channels_first format
+    (with one channel as it is grayscale)
+y: 2-D array with shape (m,number_of_classes)
+    labels for X

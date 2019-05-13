@@ -1,0 +1,41 @@
+randomize_image(image, p_same=0, p_rotate=0.75, p_flip=0.2,
+                max_angle=10, max_shift=2,
+                fixed_seeds=False, seed_count=10, seed_index=None)
+
+Returns augmentation of dataset X and labels y. This augmentation
+is produced by adding random transformations of each element of X.
+
+Parameters
+----------
+image : 3-D array of size (1, height, width)
+    image to be processed
+p_same : float between 0 and 1
+    probability of a given "transformation" being forced to be
+    identical to the original
+p_rotate : float between 0 and 1
+    probability of applying a random rotation
+p_flip : float between 0 and 1
+    probability of reflecting the image horizontally
+max_angle : nonnegative number < 360
+    maximum rotation angle, in degrees
+max_shift : nonnegative integer
+    maximum number of pixels by which to translate in each direction
+fixed_seeds : bool
+    If fixed_seeds is True, "random" seeds will be deterministically
+    computed for reproducibility, and there will be a set list
+    of seeds  used so that only a certain number
+    of image transformations are possible.
+seed_count : positive integer
+    If fixed_seeds is True, this is the number of possible
+    transformations for each image.
+seed_index : None or integer in range(seed_count)
+    If fixed_seeds is True seed_index is None, a transformation will
+    be selected from the list of possible transformations at random.
+    If fixed_seeds is True and seed_index is not None, it selects a
+    specific element from the set of possible transformations. This 
+    is used in the function augment_dataset to ensure that we get
+    one of each transformation.
+
+Returns
+-------
+image : the transformed image

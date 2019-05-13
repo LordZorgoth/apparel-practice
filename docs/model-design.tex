@@ -1,0 +1,13 @@
+\section{Model Design}
+
+\subsection{Convolutional Network}
+Our convolutional neural network follows the basic premise of using convolutional layers with $5\times 5$ windows on $28\times 28$ images, then compressing these to $14\times 14$ images and applying convolutional layers with $3\times 3$ windows, then compressing these further and feeding them into a shallow, dense network. We apply batch normalization and the ReLU activation function to all our convolutional layers. For dense layers, we use dropout and ReLU activation, except for in the final layer, where we use softmax.
+
+\subsubsection{Visualization}
+I have been attempting to produce a plots of my networks using {\ttfamily keras.utils.plot\_model()}, but for the moment, I am forced to admit defeat. This particular Keras function is very buggy and I simply don't have time to figure out what's wrong with it at the moment. I will look into it more later this week. See {\ttfamily docs/images/conv\_model.png} for what I'm getting right now; the softmax layer is off to the side with no edge connecting to it, and I also want to do something about the {\ttfamily None}s, which make perfect sense to the internal logic of Keras (representing the fact that we can use any number of training examples), but which do not look good on the diagram.
+
+\subsubsection{Parameters} \label{convolutionalparams}
+We have a number of parameters to work with in {\ttfamily model\_building.model\_build\_conv()},which is the function defining our convolutional neural network. First, there is the number of each class of convolutional layer: the first series of convolutional layers has {\ttfamily conv\_layer\_count[0]} layers, while the second has {\ttfamily conv\_layer\_count[1]}. Between these series, we allow a choice between a convolutional layer with a stride of 2 or a max pooling layer, via the boolean parameter {\ttfamily conv\_vs\_pool}. For the final layer before the dense network, we allow a choice between a global average or max pooling layer using the boolean parameter {\ttfamily global\_average\_vs\_max}, and if it is a max pooling layer, we allow the pool size to be customized via {\ttfamily final\_pool\_size}. {\ttfamily dense\_layers} is a list of the sizes of each dense layer, the last of which is 10. We expect all of these variables to have substantial effects on our model, and only parameter tuning through extensive testing will reveal the optimal configuration.
+
+\subsection{Dense Network}
+This section has yet to be written.

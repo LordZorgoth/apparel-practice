@@ -1,0 +1,36 @@
+augment_dataset(X, y, n_copies,
+                p_same=0, p_rotate=0.75, p_flip=0.2,
+                max_angle=10, max_shift=2, fixed_seeds=False)
+
+Returns augmentation of dataset X and labels y. This augmentation
+is produced by adding random transformations of each element of X.
+
+Parameters
+----------
+X : 4-D array of size (number of examples, 1, height, width)
+    The data set to augment
+y : 2-D array of size (number of examples, number of classes)
+    The labels corresponding to X
+n_copies : nonnegative integer
+    The number of transformations of each image in X to create
+p_same : float between 0 and 1
+    probability of a given "transformation" being forced to be
+    identical to the original
+p_rotate : float between 0 and 1
+    probability of applying a random rotation
+p_flip : float betewwn 0 and 1
+    probability of reflecting the image horizontally
+max_angle : nonnegative number < 360
+    maximum rotation angle, in degrees
+max_shift : nonnegative integer
+    maximum number of pixels by which to translate in each direction
+fixed_seeds : bool
+    If fixed_seeds is True, the augmented data set will contain the
+    same transformations across multiple runs of augment_dataset.
+
+Returns
+-------
+Xnew : 4-D array
+    The augmented dataset
+ynew : 2-D array
+    Labels for Xnew

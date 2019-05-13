@@ -1,0 +1,27 @@
+model_build_dense(lambda_dense=0.00002, input_shape=(1, 28, 28),
+               layers=[400, 250, 100, 50, 10],
+               dropout=[0.25, 0.5, 0.5, 0.5, 0.25],
+               is_only_for_plotting=False)
+
+Builds a Keras model for a dense neural network with
+dropout and L2 regularization.
+
+Parameters
+----------
+lambda_dense : nonnegative float
+    L2 regularization parameter
+input_shape : tuple of positive integers
+    shape of input
+layers : list of positive integers
+    size of all layers from the first hidden layer
+    to the output layer
+dropout : list of floats between 0 and 1
+    list of dropout probabilities to apply before each layer
+is_only_for_plotting : bool
+    this variable should only be set to True for making diagrams of the
+    model. The model will not work for training if it set to True.
+
+Returns
+-------
+model : keras.engine.sequential.Sequential
+    the resultant Keras model

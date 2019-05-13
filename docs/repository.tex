@@ -1,0 +1,32 @@
+\section{Repository}
+In this section, we outline the directory structure and the purpose of the various directories, as well as the important files.
+\subsection{Primary Directory}
+\subsubsection{{\ttfamily master\_plan.pdf}}
+This hyperlinked document contains the master plan that will guide our work. It first explains our dataset, our image preprocessing strategy, and our model design. It contains a complete guide to parameter tuning. It also explains the directory structure of the repository.
+\subsubsection{{\ttfamily tests.pdf}}
+This pdf, which does not yet exist, will include documentation of my test runs and plots of training and validation classification error and loss functions for various parameters. This directory contains documentation, and the sources for said documentation. Note that we currently only train networks on at most 36000 of these 60000 images, reserving the rest for cross-validation.
+\subsubsection{{\ttfamily train\_LbELtWX.zip}}
+This zip file contains the training examples.
+\subsubsection{\ttfamily train.csv}
+This file associates labels with each training example.
+\subsection{{\ttfamily train/}}
+This directory contains 60000 {\ttfamily .png} files, each of which is a training example. It does not exist until you unzip {\ttfamily train\_LbELtWX.zip}.
+\subsection{{\ttfamily code/}}
+This directory contains the core code that defines functions for loading data, image preprocessing, building Keras models, and scripts for running Keras models.
+\subsubsection{{\ttfamily augmentation.py}}
+This file is for image preprocessing and dataset augmentation. It contains the functions \hyperref[randimg]{{\ttfamily randomize\_image()}} and \hyperref[augdata]{{\ttfamily augment\_dataset()}.}
+\subsubsection{{\ttfamily model\_building.py}}
+This file is for building Keras models for neural networks. It contains the funcions \hyperref[mdlbldconv]{{\ttfamily model\_build\_conv()}} and \hyperref[mdlblddense]{{\ttfamily model\_build\_dense()}}.
+\subsubsection{{\ttfamily train\_conv\_nn\_augment\_in\_memory.py}}
+This script is currently just a basic test script that trains a convolutional neural network. Its primary function is to ensure there are no obvious bugs in the code. When we move on to doing serious tests, we will revamp this file. In the future, it will be renamed {\ttfamily train\_conv\_nn.py}, as it will include functionality for choosing between dataset augmentation in memory and on the fly.
+\subsubsection{{\ttfamily train\_dense\_nn\_augment\_in\_memory.py}}
+This script is completely analogous to the convolutional neural network script above, except that it is for dense neural networks.
+\subsection{{\ttfamily docs/}}
+\subsubsection{Compiling LaTeX Sources}
+This subsection is a stub. I still need to determine the minimal dependencies for compiling the LaTeX sources to create {\ttfamily master\_plan.pdf} and {\ttfamily tests.pdf}. For now, note that I use XeTeX rather than the basic {\ttfamily pdflatex} command. Also note that there are a large number of unnecessary LaTeX packages loaded to create this document; I just copied the preamble from my thesis. I hope to prune the list in the future.
+\subsubsection{{\ttfamily /docs/images/}}
+This directory contains the images used in master\_plan.pdf.
+\subsubsection{{\ttfamily /docs/scripts/}}
+This directory contains the Python scripts used for generating figures and other components of the documentation. They have no other effects, and are not used in training.
+\subsubsection{{\ttfamily /docs/docstrings}}
+This directory contains documentation associated with each function. This documentation is automatically extracted from all functions in the {\ttfamily code/} directory. There is a directory for each module and a file for each function within that module.

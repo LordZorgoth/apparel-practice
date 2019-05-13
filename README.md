@@ -1,6 +1,6 @@
 # Introduction
 
-This is my work on a practice problem that can be found at https://datahack.analyticsvidhya.com/contest/practice-problem-identify-the-apparels/. I am new to machine learning, and this is a very early phase of my project. I ultimately hope to carry out a detailed exploration of image classification methodology using this dataset and others, for the purpose of improving my own understanding. The code works and is documented, and the scripts `code/train_conv_nn_augment_in_memory.py` and `code/train_dense_nn_augment_in_memory.py` can be run successfully.
+This is my work on a practice problem that can be found at https://datahack.analyticsvidhya.com/contest/practice-problem-identify-the-apparels/. I am new to machine learning, and this is a very early phase of my project. I ultimately hope to carry out a detailed exploration of image classification methodology using this dataset and others, for the purpose of improving my own understanding. The code works and is documented, and the scripts `code/train_conv_nn_augment_in_memory.py` and `code/train_dense_nn_augment_in_memory.py` can be run successfully. Further documentation can be found in `master_plan.pdf`. On Windows, one may need to load `docs\\master_plan.pdf`, as I do not know that the symbolic link `master_plan.pdf` will work.
 
 # How to Use
 
