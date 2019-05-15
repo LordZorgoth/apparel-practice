@@ -18,14 +18,14 @@ def is_tracked_by_git(file_name):
     return return_value
 
 
-os.chdir('../../code')
+os.chdir('..')
 python_files = glob.glob('**.py', recursive=True)
 python_files = [file_name for file_name in python_files
                 if is_tracked_by_git(file_name)]
-python_files = [os.path.relpath(file_name, '../docs/scripts')
+python_files = [os.path.relpath(file_name, './docscripts')
                 for file_name in python_files]
 directories = glob.glob('**', recursive=True)
-os.chdir('../docs/scripts')
+os.chdir('docscripts')
 docstrings = []
 for file_name in python_files:
     with open(file_name, 'r') as f:
@@ -48,10 +48,10 @@ for file_name in python_files:
                         end_of_def_found = True
                         function_info += line[4:-1]+'\n'
                     elif line == '':
-                        print('Corrupted module ' + module_name + '.py\,'
-                              +'End of paragraph in function '
-                              +'definition, or function definition ended '
-                              +'mid-line.\nDo not trust script output.')
+                        print('Corrupted module ' + module_name + '.py:'
+                              + 'End of paragraph in function '
+                              + 'definition, or function definition ended '
+                              + 'mid-line.\nDo not trust script output.')
                         break
                     else:
                         function_info += line[4:]+'\n'
@@ -89,9 +89,8 @@ for file_name in python_files:
                                        + "\nThis function is undocumented."])
                     print("Function " + module_name + "." + function_name
                           + " is undocumented.")
-                
 module_name = ''
-os.chdir('../docstrings')
+os.chdir('../../docs/docstrings')
 for docstring in docstrings:
     old_module_name = module_name
     module_name = docstring[0]
@@ -101,4 +100,4 @@ for docstring in docstrings:
     function_name = docstring[1]
     with open(module_name + '/' + function_name, 'w') as f:
         f.write(docstring[2])
-os.chdir('../scripts')
+os.chdir('../../code/docscripts')

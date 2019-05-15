@@ -1,10 +1,6 @@
-import os
 from matplotlib import gridspec
-
-os.chdir("../../code")
-from load_data import *
+from ..load_data import load_train_data, load
 X, y = load_train_data(58)
-os.chdir("../docs/scripts")
 
 first_three_indices_of_each_class = np.array(
     [np.argwhere(y[:, k] == True)[:3, 0] for k in range(10)])

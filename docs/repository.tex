@@ -21,12 +21,12 @@ This file is for building Keras models for neural networks. It contains the func
 This script is currently just a basic test script that trains a convolutional neural network. Its primary function is to ensure there are no obvious bugs in the code. When we move on to doing serious tests, we will revamp this file. In the future, it will be renamed {\ttfamily train\_conv\_nn.py}, as it will include functionality for choosing between dataset augmentation in memory and on the fly.
 \subsubsection{{\ttfamily train\_dense\_nn\_augment\_in\_memory.py}}
 This script is completely analogous to the convolutional neural network script above, except that it is for dense neural networks.
+\subsubsection{{\ttfamily /code/scripts/}}
+This directory contains the Python scripts used for generating figures and other components of the documentation. They have no other effects, and are not used in training.
 \subsection{{\ttfamily docs/}}
 \subsubsection{Compiling LaTeX Sources}
 This subsection is a stub. I still need to determine the minimal dependencies for compiling the LaTeX sources to create {\ttfamily master\_plan.pdf} and {\ttfamily tests.pdf}. For now, note that I use XeTeX rather than the basic {\ttfamily pdflatex} command. Also note that there are a large number of unnecessary LaTeX packages loaded to create this document; I just copied the preamble from my thesis. I hope to prune the list in the future.
 \subsubsection{{\ttfamily /docs/images/}}
 This directory contains the images used in master\_plan.pdf.
-\subsubsection{{\ttfamily /docs/scripts/}}
-This directory contains the Python scripts used for generating figures and other components of the documentation. They have no other effects, and are not used in training.
 \subsubsection{{\ttfamily /docs/docstrings}}
 This directory contains documentation associated with each function. This documentation is automatically extracted from all functions in the {\ttfamily code/} directory. There is a directory for each module and a file for each function within that module.
