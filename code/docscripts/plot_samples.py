@@ -1,7 +1,15 @@
+import matplotlib.pyplot as plt
 from matplotlib import gridspec
-from ..load_data import load_train_data, load
-X, y = load_train_data(58)
+from ..load_data import load_train_data
+import os
+import sys
 
+os.chdir('..')
+X, y = load_train_data(58)
+os.chdir('docscripts')
+
+this_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+os.chdir(this_dir)
 first_three_indices_of_each_class = np.array(
     [np.argwhere(y[:, k] == True)[:3, 0] for k in range(10)])
 class_names = {0: "Short-Sleeve Tops",
@@ -33,4 +41,4 @@ for k in range(10):
 for subplot_row in range(5):
     ax = plt.subplot(gs[subplot_row, 3])
     ax.axis('off')
-plt.savefig('../images/sample_images.png')
+plt.savefig('../../docs/images/sample_images.png')

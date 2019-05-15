@@ -32,7 +32,7 @@ seed_index : None or integer in range(seed_count)
     If fixed_seeds is True seed_index is None, a transformation will
     be selected from the list of possible transformations at random.
     If fixed_seeds is True and seed_index is not None, it selects a
-    specific element from the set of possible transformations. This 
+    specific element from the set of possible transformations. This
     is used in the function augment_dataset to ensure that we get
     one of each transformation.
 

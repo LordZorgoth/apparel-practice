@@ -7,7 +7,8 @@
 import os
 import glob
 import subprocess
-
+import inspect
+import sys
 
 def is_tracked_by_git(file_name):
     os.chdir('..')
@@ -17,19 +18,19 @@ def is_tracked_by_git(file_name):
     os.chdir('code')
     return return_value
 
-
+this_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+os.chdir(this_dir)
 os.chdir('..')
 python_files = glob.glob('**.py', recursive=True)
 python_files = [file_name for file_name in python_files
                 if is_tracked_by_git(file_name)]
 python_files = [os.path.relpath(file_name, './docscripts')
                 for file_name in python_files]
-directories = glob.glob('**', recursive=True)
 os.chdir('docscripts')
 docstrings = []
 for file_name in python_files:
     with open(file_name, 'r') as f:
-        module_name = file_name[11:-3]
+        module_name = file_name[3:-3]
         function_name = ''
         line = True
         while line:
